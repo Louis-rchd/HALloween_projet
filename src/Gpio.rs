@@ -1,6 +1,11 @@
 #![no_std]
 
 use core::arch::asm;
+/* [CORRECTION GPIO] 
+    The arch module of the core crate is not made for all CPU architecture, and not for AVR for example.
+(Don't hesitate to remove this comment)
+*/
+
 
 pub struct GPIO;
 
