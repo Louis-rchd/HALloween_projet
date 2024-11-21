@@ -8,7 +8,8 @@ mod gpio;
 mod AtmegaUSART;
 mod CortexUSART;
 
-// Sélectionner le microcontrôleur à exécuter via `features`
+
+//USART RX/TX
 #[cfg(feature = "atmega")]
 #[no_mangle]
 pub extern "C" fn main() -> ! {
@@ -21,6 +22,8 @@ pub extern "C" fn main() -> ! {
     CortexUSART::cortex_usart();
 }
 
+
+//GPIO led
 #[no_mangle]
 pub extern "C" fn main() -> ! {
     // Configure le pin 13 comme sortie
