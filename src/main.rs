@@ -1,10 +1,25 @@
-// main.rs
 #![no_std]
 #![no_main]
 
 use core::panic::PanicInfo;
 use core::arch::asm;
+
 mod gpio;
+mod AtmegaUSART;
+mod CortexUSART;
+
+// Sélectionner le microcontrôleur à exécuter via `features`
+#[cfg(feature = "atmega")]
+#[no_mangle]
+pub extern "C" fn main() -> ! {
+    AtmegaUSART::atmega_usart();
+}
+
+#[cfg(feature = "cortex")]
+#[no_mangle]
+pub extern "C" fn main() -> ! {
+    CortexUSART::cortex_usart();
+}
 
 #[no_mangle]
 pub extern "C" fn main() -> ! {
@@ -30,7 +45,7 @@ pub extern "C" fn main() -> ! {
     }
 }
 
-// Fonction de délai
+// Fonction de délai (utile uniquement si vous utilisez GPIO)
 fn delay() {
     for _ in 0..1_000_000 {
         unsafe { asm!("nop"); } // Instruction vide pour créer un délai
