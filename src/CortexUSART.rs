@@ -1,5 +1,10 @@
 // de la même manière que pour l'Atmega
 
+
+/*
+[CORRECTION USART] (Don't hesitate to remove this part)
+stm32f7xx_hal is an external HAL, and you shouldn't use it. You are supposed to do the hardware abstraction directly.
+*/
 use cortex_m_rt::entry;
 use stm32f7xx_hal::{
     pac,

@@ -9,6 +9,8 @@ panic = "abort"
 [profile.release]
 panic = "abort"
 
+# [CORRECTION USART] (Don't hesitate to remove this part)
+# Even if you are not using the external HAL that are in the Cargo.toml file, I recommand you remove them from your dependencies, it could generate errors.
 [dependencies]
 # Dépendances communes
 embedded-hal = "0.2.7"
@@ -19,6 +21,10 @@ cortex-m = { version = "0.7.6", optional = true }  # Pour Cortex-M
 cortex-m-rt = { version = "0.7.2", optional = true }  # Pour Cortex-M runtime
 stm32f7xx-hal = { version = "0.13.0", optional = true }  # HAL STM32F7
 
+
+
+# [CORRECTION USART] (Don't hesitate to remove this part)
+# If you want to use conditionnal feature as stm32f746 or avr-hal, you should declare them as well as features (like ```stm32f746=[]```)
 [features]
 # Feature par défaut
 default = ["stm32f746"]

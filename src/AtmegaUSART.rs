@@ -1,5 +1,9 @@
 //on cherche à envoyer un message sur la broche TX et lire les données reçues sur la broche RX.
 
+/*
+[CORRECTION USART] (Don't hesitate to remove this part)
+arduino_hal is an external HAL, and you shouldn't use it. You are supposed to do the hardware abstraction directly.
+*/
 use arduino_hal::prelude::*;
 
 #[arduino_hal::entry]
