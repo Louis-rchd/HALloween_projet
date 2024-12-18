@@ -1,37 +1,32 @@
 //on cherche à envoyer un message sur la broche TX et lire les données reçues sur la broche RX.
 
-/*
-[CORRECTION USART] (Don't hesitate to remove this part)
-arduino_hal is an external HAL, and you shouldn't use it. You are supposed to do the hardware abstraction directly.
-*/
-use arduino_hal::prelude::*;
+use embedded_hal::serial;
 
-#[arduino_hal::entry]
+#[no_mangle]
 pub fn atmega_usart() -> ! {
 
-    // initialisation des pins
+    // Initialisation des périphériques
     let dp = arduino_hal::Peripherals::take().unwrap();
     let mut pins = arduino_hal::pins!(dp);
 
-    // configuration de l'USART avec TX sur D1 et RX sur D0
+    // Configuration de l'USART avec TX sur D1 et RX sur D0
     let mut serial = arduino_hal::usart::Usart0::new(
         dp.USART0,
         pins.d0.into_input(&mut pins.ddr), // RX
         pins.d1.into_output(&mut pins.ddr), // TX
-        9600, // baudrate
+        9600, // Baudrate
     );
 
-    let message = b"Message from ATmega328p!\n";
+    let message = b"Hello from ATmega328p!\n";
 
     loop {
-        // envoie un tableau d'octets depuis TX
+        // Envoi d'un tableau d'octets depuis TX
         serial.write_bytes(message).unwrap();
 
-        // lis le message recu sur RX
+        // Lecture du message reçu sur RX
         if let Ok(received) = serial.read() {
-            // retourne en écho du message reçu
+            // Retour en écho du message reçu
             serial.write(received).unwrap();
         }
     }
 }
-
