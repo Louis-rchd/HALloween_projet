@@ -34,3 +34,15 @@ atmega328p = ["avr-hal"]
 
 # Feature pour l'architecture STM32 Cortex-M7
 stm32f746 = ["cortex-m", "cortex-m-rt", "stm32f7xx-hal"]
+
+# Feature SPI
+spi = [
+    "atmega328p_spi",
+    "stm32f746_spi"
+]
+
+# SPI pour ATmega328P
+atmega328p_spi = ["avr-hal"]
+
+# SPI pour STM32F746, à faire lors de la compilation
+stm32f746_spi = []
