@@ -7,20 +7,43 @@ use core::arch::asm;
 mod gpio;
 mod AtmegaUSART;
 mod CortexUSART;
+mod Atmega_SPI;
+mod Cortex_SPI;
 
-
-//USART RX/TX
+//USART SPI
 #[cfg(feature = "atmega")]
 #[no_mangle]
 pub extern "C" fn main() -> ! {
+    // Initialisation de l'USART et SPI pour Atmega
     AtmegaUSART::atmega_usart();
+    let mut spi = Atmega_SPI::setup_spi();
+
+    loop {
+        //test
+        let _ = spi.send(0x42); //envoi
+        if let Ok(data) = spi.read() {
+            //lecture
+            let _ = data;
+        }
+    }
 }
 
 #[cfg(feature = "cortex")]
 #[no_mangle]
 pub extern "C" fn main() -> ! {
+    // Initialisation de l'USART et SPI pour Cortex-M
     CortexUSART::cortex_usart();
+    let mut spi = Cortex_SPI::setup_spi();
+
+    loop {
+        //test
+        let _ = spi.send(0x42);
+        if let Ok(data) = spi.read() {
+            let _ = data;
+        }
+    }
 }
+
 
 
 //GPIO led
