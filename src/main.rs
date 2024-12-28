@@ -9,8 +9,12 @@ mod AtmegaUSART;
 mod CortexUSART;
 mod Atmega_SPI;
 mod Cortex_SPI;
+#[cfg(feature = "atmega328p_i2c")]
+mod ATmega_I2C;
+#[cfg(feature = "cortex_i2c")]
+mod Cortex_I2C;
 
-//USART SPI
+//USART SPI ATMEGA
 #[cfg(feature = "atmega")]
 #[no_mangle]
 pub extern "C" fn main() -> ! {
@@ -28,6 +32,7 @@ pub extern "C" fn main() -> ! {
     }
 }
 
+//USART SPI CORTEX
 #[cfg(feature = "cortex")]
 #[no_mangle]
 pub extern "C" fn main() -> ! {
@@ -41,6 +46,33 @@ pub extern "C" fn main() -> ! {
         if let Ok(data) = spi.read() {
             let _ = data;
         }
+    }
+}
+
+
+//I2C ATMEGA
+#[cfg(feature = "atmega328p_i2c")]
+#[no_mangle]
+pub extern "C" fn main() -> ! {
+    let mut i2c = ATmega_I2C::ATmegaI2C::new();
+    let mut buffer = [0u8; 4];
+
+    loop {
+        i2c.read(0x08, &mut buffer).unwrap(); //lecture depuis le cortex
+        i2c.write(0x08, b"Well received!").unwrap(); // envoi d'une réponse
+    }
+}
+
+//I2C CORTEX
+[cfg(feature = "cortex_i2c")]
+#[no_mangle]
+pub extern "C" fn main() -> ! {
+    let peripherals = unsafe { stm32f1::stm32f103::Peripherals::steal() };
+    let mut i2c = Cortex_I2C::CortexI2C::new(peripherals);
+
+    loop {
+        i2c.write(0x08, &[0x01, 0x02, 0x03]).unwrap(); //envoi vers atmega
+        delay();
     }
 }
 
@@ -71,10 +103,10 @@ pub extern "C" fn main() -> ! {
     }
 }
 
-// Fonction de délai (utile uniquement si vous utilisez GPIO)
+//délai pour gpio
 fn delay() {
     for _ in 0..1_000_000 {
-        unsafe { asm!("nop"); } // Instruction vide pour créer un délai
+        unsafe { asm!("nop"); } //instruction vide pour créer un délai
     }
 }
 
