@@ -20,29 +20,28 @@ avr-hal = { version = "0.5.0", optional = true }  # Pour atmega328p
 cortex-m = { version = "0.7.6", optional = true }  # Pour Cortex-M
 cortex-m-rt = { version = "0.7.2", optional = true }  # Pour Cortex-M runtime
 stm32f7xx-hal = { version = "0.13.0", optional = true }  # HAL STM32F7
-
-
+stm32f1xx-hal = { version = "0.10.0", optional = true }  # HAL STM32F1 officiel
 
 # [CORRECTION USART] (Don't hesitate to remove this part)
 # If you want to use conditionnal feature as stm32f746 or avr-hal, you should declare them as well as features (like ```stm32f746=[]```)
 [features]
-# Feature par défaut
-default = ["stm32f746"]
 
-# Feature pour l'architecture ATmega328P
-atmega328p = ["avr-hal"]
+default = ["stm32f1"]
 
-# Feature pour l'architecture STM32 Cortex-M7
-stm32f746 = ["cortex-m", "cortex-m-rt", "stm32f7xx-hal"]
+atmega328p = ["avr-hal", "atmega328p_i2c"]
+stm32f1 = ["cortex-m", "cortex-m-rt", "stm32f1", "stm32f1xx-hal", "cortex_i2c"]
 
-# Feature SPI
+#fichiers I2C
+cortex_i2c = []
+atmega328p_i2c = []
+
+#SPI
 spi = [
     "atmega328p_spi",
-    "stm32f746_spi"
+    "stm32f1_spi"
 ]
-
-# SPI pour ATmega328P
+#SPI pour ATmega328P
 atmega328p_spi = ["avr-hal"]
+#SPI pour STM32F1
+stm32f1_spi = ["stm32f1xx-hal"]
 
-# SPI pour STM32F746, à faire lors de la compilation
-stm32f746_spi = []
